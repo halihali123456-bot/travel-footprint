@@ -1,97 +1,73 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { ElMessage } from 'element-plus'
-import store from '../store'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import Layout from '@/views/Layout.vue'
+import Home from '@/views/Home.vue'
+import Login from '@/views/Login.vue'
+import Register from '@/views/Register.vue'
+import Stories from '@/views/Stories.vue'
+import StoryDetail from '@/views/StoryDetail.vue'
+import CreateStory from '@/views/CreateStory.vue'
+import MyStories from '@/views/MyStories.vue'
+import Timeline from '@/views/Timeline.vue'
+import Profile from '@/views/Profile.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Layout',
-    component: () => import('../views/Layout.vue'),
+    component: Layout,
     redirect: '/home',
     children: [
       {
         path: '/home',
         name: 'Home',
-        component: () => import('../views/Home.vue'),
-        meta: { title: '首页' }
+        component: Home
       },
       {
         path: '/stories',
         name: 'Stories',
-        component: () => import('../views/Stories.vue'),
-        meta: { title: '探索故事' }
+        component: Stories
       },
       {
         path: '/story/:id',
         name: 'StoryDetail',
-        component: () => import('../views/StoryDetail.vue'),
-        meta: { title: '故事详情' }
-      },
-      {
-        path: '/timeline',
-        name: 'Timeline',
-        component: () => import('../views/Timeline.vue'),
-        meta: { title: '时间线', requireAuth: true }
+        component: StoryDetail
       },
       {
         path: '/create',
         name: 'CreateStory',
-        component: () => import('../views/CreateStory.vue'),
-        meta: { title: '创建故事', requireAuth: true }
-      },
-      {
-        path: '/edit/:id',
-        name: 'EditStory',
-        component: () => import('../views/CreateStory.vue'),
-        meta: { title: '编辑故事', requireAuth: true }
-      },
-      {
-        path: '/profile',
-        name: 'Profile',
-        component: () => import('../views/Profile.vue'),
-        meta: { title: '个人中心', requireAuth: true }
+        component: CreateStory
       },
       {
         path: '/my-stories',
         name: 'MyStories',
-        component: () => import('../views/MyStories.vue'),
-        meta: { title: '我的故事', requireAuth: true }
+        component: MyStories
+      },
+      {
+        path: '/timeline',
+        name: 'Timeline',
+        component: Timeline
+      },
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile
       }
     ]
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/Login.vue'),
-    meta: { title: '登录' }
+    component: Login
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('../views/Register.vue'),
-    meta: { title: '注册' }
+    component: Register
   }
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory('/travel-footprint/'),
   routes
-})
-
-// 路由守卫
-router.beforeEach((to, from, next) => {
-  // 设置页面标题
-  if (to.meta.title) {
-    document.title = to.meta.title + ' - 旅行足迹'
-  }
-  
-  // 检查是否需要登录
-  if (to.meta.requireAuth && !store.getters.isLoggedIn) {
-    ElMessage.warning('请先登录')
-    next('/login')
-  } else {
-    next()
-  }
 })
 
 export default router
